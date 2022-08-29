@@ -14,14 +14,14 @@ public class FibonacciService : IFibonacciService
         _memoryCache = memoryCache;
     }
     
-    public Task<IEnumerable<int>> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, int maxMemory)
+    public async Task<IEnumerable<int>> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, int maxMemory)
     {
         if (useCache)
         {
-            
+            var sequenceFromCache = await _memoryCache.GetOrCreateAsync("sequence", _ => Task.FromResult(new List<int>()));
         }
 
         var subsequence = _fibonacciCalculator.GetSubsequence(firstIndex, lastIndex);
-        return Task.FromResult(subsequence);
+        return subsequence;
     }
 }

@@ -27,17 +27,3 @@ app.MapGet(
             ));
 
 app.Run();
-
-public record QueryParams(int FirstIndex, int LastIndex, bool UseCache, int TimeToRun, int MaxMemory)
-{
-    public static ValueTask<QueryParams?> BindAsync(HttpContext httpContext, ParameterInfo parameter)
-    {
-        var firstIndex = int.TryParse(httpContext.Request.Query["firstIndex"], out var fi) ? fi : 0;
-        var lastIndex = int.TryParse(httpContext.Request.Query["lastIndex"], out var li) ? li : 0;
-        var useCache = bool.TryParse(httpContext.Request.Query["useCache"], out var uc) && uc;
-        var timeToRun = int.TryParse(httpContext.Request.Query["timeToRun"], out var ttr) ? ttr : 1 * 60 * 1000; // 1 minute
-        var maxMemory = int.TryParse(httpContext.Request.Query["maxMemory"], out var mm) ? mm : 20 * 1000; // 20mb
-
-        return ValueTask.FromResult<QueryParams>(new QueryParams(firstIndex, lastIndex, useCache, timeToRun, maxMemory));
-    }
-}
