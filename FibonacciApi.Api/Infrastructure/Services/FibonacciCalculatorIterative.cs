@@ -4,19 +4,36 @@ namespace FibonacciApi.Api.Infrastructure.Services;
 
 public class FibonacciCalculatorIterative : IFibonacciCalculator
 {
-    public int GetNth(int n)
+    public IEnumerable<int> GetSubsequence(int firstIndex, int lastIndex)
     {
-        var fibs = new int[n + 1];
-        if (n == 0)
-            return 0;
-        fibs[0]= 0;
-        if (n == 1)
-            return 1;
-        fibs[1]= 1;
-        for (var i = 2; i <= n;i++)  
-        {  
-            fibs[i] = fibs[i - 2] + fibs[i - 1];  
-        }  
-        return fibs[n]; 
+        if (firstIndex < 0 || lastIndex < 0)
+            throw new Exception("indexes cannot be negative");
+        
+        if (firstIndex > lastIndex)
+            throw new Exception("first index cannot be grater than last index");
+
+        switch (lastIndex)
+        {
+            case 0:
+                yield return 0;
+                break;
+            case 1:
+                yield return 0;
+                yield return 1;
+                break;
+        }
+
+        int previous = 0, current = 1, next, index = 1;
+
+        while (index < lastIndex)
+        {
+            next = previous + current;
+            previous = current;
+            current = next;
+            index++;
+
+            if (firstIndex <= index)
+                yield return next;
+        }
     }
 }

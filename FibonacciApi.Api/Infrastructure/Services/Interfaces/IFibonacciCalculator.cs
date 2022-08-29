@@ -2,5 +2,5 @@
 
 public interface IFibonacciCalculator
 {
-    int GetNth(int n);
+    IEnumerable<int> GetSubsequence(int firstIndex, int lastIndex);
 }
