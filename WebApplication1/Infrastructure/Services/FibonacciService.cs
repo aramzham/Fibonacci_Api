@@ -37,10 +37,14 @@ namespace WebApplication1.Api.Infrastructure.Services
             int next = current + previos;
             int nextIndex = 2;
             bool breakOperation = false;
-
-
             Stopwatch StopWatch = new Stopwatch();
-            StopWatch.Start();
+
+            if (time != 0)
+            {
+
+                StopWatch.Start();
+            }
+
 
             if (first > last)
             {
@@ -58,9 +62,17 @@ namespace WebApplication1.Api.Infrastructure.Services
                 yield return 1;
             }
 
+            //Milisecunds
+            //2022 - 08 - 30 02:13:29.2124032
+            //2022 - 08 - 30 02:13:29.2125146
+            //2022 - 08 - 30 02:13:29.2125998
+            //2022 - 08 - 30 02:13:29.2126677
+            //2022 - 08 - 30 02:13:29.2127438
+            //2022 - 08 - 30 02:13:29.2136498
+            //2022 - 08 - 30 02:13:29.2141811
             while (nextIndex < last || breakOperation)
             {
-                if (StopWatch.ElapsedMilliseconds >= time)
+                if (StopWatch.ElapsedMilliseconds >= time && time != 0)
                 {
                     StopWatch.Stop();
                     breakOperation = true;
@@ -73,6 +85,7 @@ namespace WebApplication1.Api.Infrastructure.Services
 
                 if (first <= nextIndex)
                 {
+                    Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
                     yield return next;
                 }
             }
