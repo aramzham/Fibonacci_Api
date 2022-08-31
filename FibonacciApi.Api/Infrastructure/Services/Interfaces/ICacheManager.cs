@@ -2,5 +2,6 @@
 
 public interface ICacheManager
 {
-    Task<IEnumerable<int>> Get(int firstIndex, int lastIndex);
+    int[] Get(int firstIndex, int lastIndex);
+    void Set(int value, int index);
 }

@@ -4,11 +4,11 @@ namespace FibonacciApi.Api.Infrastructure.Services;
 
 public class FibonacciCalculatorIterative : IFibonacciCalculator
 {
-    public IEnumerable<int> GetSubsequence(int firstIndex, int lastIndex)
+    public IEnumerable<int> GetSubsequence(int firstIndex, int lastIndex, ICacheManager cacheManager, int previous = 0, int current = 1, int index = 1)
     {
         if (firstIndex < 0 || lastIndex < 0)
             throw new Exception("indexes cannot be negative");
-        
+
         if (firstIndex > lastIndex)
             throw new Exception("first index cannot be grater than last index");
 
@@ -23,7 +23,7 @@ public class FibonacciCalculatorIterative : IFibonacciCalculator
                 break;
         }
 
-        int previous = 0, current = 1, next, index = 1;
+        int next;
 
         while (index < lastIndex)
         {
@@ -31,6 +31,7 @@ public class FibonacciCalculatorIterative : IFibonacciCalculator
             previous = current;
             current = next;
             index++;
+            cacheManager.Set(next, index);
 
             if (firstIndex <= index)
                 yield return next;

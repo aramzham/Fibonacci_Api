@@ -6,22 +6,28 @@ namespace FibonacciApi.Api.Infrastructure.Services;
 public class FibonacciService : IFibonacciService
 {
     private readonly IFibonacciCalculator _fibonacciCalculator;
-    private readonly IMemoryCache _memoryCache;
+    private readonly ICacheManager _cacheManager;
 
-    public FibonacciService(IFibonacciCalculator fibonacciCalculator, IMemoryCache memoryCache)
+    public FibonacciService(IFibonacciCalculator fibonacciCalculator, ICacheManager cacheManager)
     {
         _fibonacciCalculator = fibonacciCalculator;
-        _memoryCache = memoryCache;
+        _cacheManager = cacheManager;
     }
-    
-    public async Task<IEnumerable<int>> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, int maxMemory)
+
+    public async ValueTask<IEnumerable<int>> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun,
+        int maxMemory)
     {
+        var partFromCache = Array.Empty<int>();
         if (useCache)
         {
-            var sequenceFromCache = await _memoryCache.GetOrCreateAsync("sequence", _ => Task.FromResult(new List<int>()));
+            partFromCache = _cacheManager.Get(firstIndex, lastIndex);
         }
 
-        var subsequence = _fibonacciCalculator.GetSubsequence(firstIndex, lastIndex);
+        if (partFromCache.Length == lastIndex - firstIndex + 1)
+            return partFromCache;
+
+        var subsequence =
+            _fibonacciCalculator.GetSubsequence(firstIndex + partFromCache.Length, lastIndex, _cacheManager);
         return subsequence;
     }
 }

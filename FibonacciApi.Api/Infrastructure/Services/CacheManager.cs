@@ -5,17 +5,19 @@ namespace FibonacciApi.Api.Infrastructure.Services;
 
 public class CacheManager : ICacheManager
 {
-    private const string CacheKey = "sequence";
-    private readonly IMemoryCache _memoryCache;
-
-    public CacheManager(IMemoryCache memoryCache)
-    {
-        _memoryCache = memoryCache;
-    }
+    private readonly List<int> _cache = new() { 0, 1 };
     
-    public async Task<IEnumerable<int>> Get(int firstIndex, int lastIndex)
+    public int[] Get(int firstIndex, int lastIndex)
     {
-        var sequence = await _memoryCache.GetOrCreateAsync(CacheKey, _ => Task.FromResult(new List<int>()));
-        return sequence.Skip(firstIndex).Take(lastIndex - firstIndex + 1);
+        if (firstIndex >= _cache.Count)
+            return Array.Empty<int>();
+        
+        return _cache.Skip(firstIndex).Take(lastIndex - firstIndex + 1).ToArray();
+    }
+
+    public void Set(int value, int index)
+    {
+        if(index == _cache.Count)
+            _cache.Add(value);
     }
 }

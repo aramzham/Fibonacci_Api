@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IFibonacciCalculator, FibonacciCalculatorIterative>();
 builder.Services.AddTransient<IFibonacciService, FibonacciService>();
+builder.Services.AddSingleton<ICacheManager, CacheManager>();
 
 builder.Services.AddMemoryCache();
 

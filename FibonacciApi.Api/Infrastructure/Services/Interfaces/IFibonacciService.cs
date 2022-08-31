@@ -2,5 +2,5 @@
 
 public interface IFibonacciService
 {
-    Task<IEnumerable<int>> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, int maxMemory);
+    ValueTask<IEnumerable<int>> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, int maxMemory);
 }
