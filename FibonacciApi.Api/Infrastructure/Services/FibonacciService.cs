@@ -27,7 +27,13 @@ public class FibonacciService : IFibonacciService
             return partFromCache;
 
         var subsequence =
-            _fibonacciCalculator.GetSubsequence(firstIndex + partFromCache.Length, lastIndex, _cacheManager);
-        return subsequence;
+            _fibonacciCalculator.GetSubsequence(
+                firstIndex + partFromCache.Length,
+                lastIndex,
+                _cacheManager,
+                _cacheManager.GetPenultimate(),
+                _cacheManager.GetUltimate(),
+                partFromCache.Any() ? _cacheManager.GetLastIndex() : 1);
+        return partFromCache.Any() ? partFromCache.Concat(subsequence) : subsequence;
     }
 }

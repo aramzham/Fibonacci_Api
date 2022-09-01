@@ -4,4 +4,7 @@ public interface ICacheManager
 {
     int[] Get(int firstIndex, int lastIndex);
     void Set(int value, int index);
+    int GetPenultimate();
+    int GetUltimate();
+    int GetLastIndex();
 }

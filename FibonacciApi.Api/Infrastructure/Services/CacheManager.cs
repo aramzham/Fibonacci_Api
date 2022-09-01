@@ -20,4 +20,10 @@ public class CacheManager : ICacheManager
         if(index == _cache.Count)
             _cache.Add(value);
     }
+
+    public int GetPenultimate() => _cache[^2];
+
+    public int GetUltimate() => _cache[^1];
+
+    public int GetLastIndex() => _cache.Count - 1;
 }
