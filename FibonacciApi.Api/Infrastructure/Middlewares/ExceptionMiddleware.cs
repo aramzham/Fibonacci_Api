@@ -21,17 +21,17 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             _logger.LogError($"Something went wrong: {ex}");
-            await HandleExceptionAsync(httpContext, ex);
+            await HandleExceptionAsync(httpContext, ex.Message);
         }
     }
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, string? message)
     {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         await context.Response.WriteAsync(new ErrorModel()
         {
             StatusCode = context.Response.StatusCode,
-            Message = "Internal Server Error from the custom middleware."
+            Message = message ?? "Internal Server Error from the custom middleware."
         }.ToString());
     }
 }
