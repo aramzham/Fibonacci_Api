@@ -3,5 +3,5 @@
 public interface IExecutionTimeChecker
 {
     void Run();
-    bool IsTimeElapsed(int timeToRun);
+    bool IsTimeElapsed(long timeToRun);
 }

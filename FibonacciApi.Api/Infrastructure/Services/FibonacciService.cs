@@ -16,7 +16,7 @@ public class FibonacciService : IFibonacciService
         _cacheManager = cacheManager;
     }
 
-    public async ValueTask<ResponseModel> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, double maxMemory)
+    public async ValueTask<ResponseModel> GetSubsequence(ulong firstIndex, ulong lastIndex, bool useCache, ulong timeToRun, double maxMemory)
     {
         // run the timer
         _timeChecker.Run();
@@ -27,9 +27,9 @@ public class FibonacciService : IFibonacciService
         if (firstIndex > lastIndex)
             throw new Exception("first index cannot be grater than last index");
 
-        var sequence = new List<int>();
+        var sequence = new List<ulong>();
         var message = default(string);
-        for (var i = 0; i <= lastIndex; i++)
+        for (ulong i = 0; i <= lastIndex; i++)
         {
             if (_memoryChecker.IsThresholdReached(maxMemory))
             {
@@ -37,7 +37,7 @@ public class FibonacciService : IFibonacciService
                 break;
             }
             
-            if (_timeChecker.IsTimeElapsed(timeToRun))
+            if (_timeChecker.IsTimeElapsed(Convert.ToInt64(timeToRun)))
             {
                 message = "Time has elapsed";
                 break;
@@ -54,8 +54,9 @@ public class FibonacciService : IFibonacciService
         };
     }
 
-    private async Task<int> Fib(int n, bool useCache)
+    private async Task<ulong> Fib(ulong n, bool useCache)
     {
+
         if (useCache && _cacheManager.Contains(n))
             return _cacheManager.Get(n);
         else if (n < 2)

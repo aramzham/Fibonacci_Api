@@ -24,13 +24,13 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapGet(
     "/fib",
-    ([FromServices]IFibonacciService fibonacciService, int? firstIndex, int? lastIndex, bool? useCache, int? timeToRun, double? maxMemory) =>
+    ([FromServices]IFibonacciService fibonacciService, ulong? firstIndex, ulong? lastIndex, bool? useCache, ulong? timeToRun, double? maxMemory) =>
         fibonacciService.GetSubsequence(
             firstIndex ?? 0,
             lastIndex ?? 0,
             useCache ?? false,
             timeToRun ?? 1 * 60 * 1000, // 1 minute
-            maxMemory ?? 100 // 100mb
+            maxMemory ?? 1000 // 1000mb
         ));
 
 app.Run();

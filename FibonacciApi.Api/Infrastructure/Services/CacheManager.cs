@@ -7,22 +7,22 @@ public class CacheManager : ICacheManger
 {
     private System.Timers.Timer _cacheInvalidationTimer;
     
-    private readonly Dictionary<int, int> _cache = new() { { 0, 0 }, { 1, 1 } };
+    private readonly Dictionary<ulong, ulong> _cache = new() { { 0, 0 }, { 1, 1 } };
 
     public CacheManager(IConfiguration configuration)
     {
         _cacheInvalidationTimer = new System.Timers.Timer();
         _cacheInvalidationTimer.Elapsed += OnTimerElapsed;
         _cacheInvalidationTimer.Interval =
-            int.TryParse(configuration["CacheLifeTimeInMs"], out var clt) ? clt : 60000;
+            ulong.TryParse(configuration["CacheLifeTimeInMs"], out var clt) ? clt : 60000;
         _cacheInvalidationTimer.Enabled = true;
     }
     
-    public bool Contains(int i) => _cache.ContainsKey(i);
+    public bool Contains(ulong i) => _cache.ContainsKey(i);
     
-    public int Get(int n) => _cache[n];
+    public ulong Get(ulong n) => _cache[n];
 
-    public void Set(int value, int index) => _cache[index] = value;
+    public void Set(ulong value, ulong index) => _cache[index] = value;
     
     private void OnTimerElapsed(object? sender, ElapsedEventArgs e)
     {
