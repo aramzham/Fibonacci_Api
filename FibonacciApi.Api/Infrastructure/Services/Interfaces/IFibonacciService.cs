@@ -1,6 +1,9 @@
-﻿namespace FibonacciApi.Api.Infrastructure.Services.Interfaces;
+﻿using FibonacciApi.Api.Infrastructure.Models;
+
+namespace FibonacciApi.Api.Infrastructure.Services.Interfaces;
 
 public interface IFibonacciService
 {
-    ValueTask<IEnumerable<int>> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, int maxMemory);
+    ValueTask<ResponseModel> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun,
+        double maxMemory);
 }

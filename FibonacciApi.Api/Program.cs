@@ -5,11 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddTransient<IFibonacciCalculator, FibonacciCalculatorIterative>();
+builder.Services.AddSingleton<ICacheManger, CacheManager>();
 builder.Services.AddTransient<IFibonacciService, FibonacciService>();
-builder.Services.AddSingleton<ICacheManager, CacheManager>();
-builder.Services.AddSingleton<CacheManagerDictionary>();
-builder.Services.AddTransient<FibonacciCalculatorRecursive>();
 builder.Services.AddTransient<IMemoryChecker, MemoryChecker>();
 builder.Services.AddTransient<IExecutionTimeChecker, ExecutionTimeChecker>();
 
@@ -25,26 +22,15 @@ app.UseSwaggerUI();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-// app.MapGet(
-//     "/fib",
-//     ([FromServices]IFibonacciService fibonacciService, HttpRequest request) =>
-//         fibonacciService.GetSubsequence(
-//             int.TryParse(request.Query["firstIndex"], out var fi) ? fi : 0,
-//             int.TryParse(request.Query["lastIndex"], out var li) ? li : 0,
-//             bool.TryParse(request.Query["useCache"], out var uc) && uc,
-//             int.TryParse(request.Query["timeToRun"], out var ttr) ? ttr : 1 * 60 * 1000, // 1 minute
-//             int.TryParse(request.Query["maxMemory"], out var mm) ? mm : 20 // 20mb
-//             ));
-
 app.MapGet(
     "/fib",
-    ([FromServices]FibonacciCalculatorRecursive fibonacciService, HttpRequest request) =>
+    ([FromServices]IFibonacciService fibonacciService, int? firstIndex, int? lastIndex, bool? useCache, int? timeToRun, double? maxMemory) =>
         fibonacciService.GetSubsequence(
-            int.TryParse(request.Query["firstIndex"], out var fi) ? fi : 0,
-            int.TryParse(request.Query["lastIndex"], out var li) ? li : 0,
-            bool.TryParse(request.Query["useCache"], out var uc) && uc,
-            int.TryParse(request.Query["timeToRun"], out var ttr) ? ttr : 1 * 60 * 1000, // 1 minute
-            double.TryParse(request.Query["maxMemory"], out var mm) ? mm : 100 // 100mb
+            firstIndex ?? 0,
+            lastIndex ?? 0,
+            useCache ?? false,
+            timeToRun ?? 1 * 60 * 1000, // 1 minute
+            maxMemory ?? 100 // 100mb
         ));
 
 app.Run();

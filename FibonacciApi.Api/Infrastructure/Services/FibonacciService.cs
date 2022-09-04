@@ -1,39 +1,73 @@
-﻿using FibonacciApi.Api.Infrastructure.Services.Interfaces;
-using Microsoft.Extensions.Caching.Memory;
+﻿using FibonacciApi.Api.Infrastructure.Models;
+using FibonacciApi.Api.Infrastructure.Services.Interfaces;
 
 namespace FibonacciApi.Api.Infrastructure.Services;
 
 public class FibonacciService : IFibonacciService
 {
-    private readonly IFibonacciCalculator _fibonacciCalculator;
-    private readonly ICacheManager _cacheManager;
+    private readonly IMemoryChecker _memoryChecker;
+    private readonly IExecutionTimeChecker _timeChecker;
+    private readonly ICacheManger _cacheManager;
 
-    public FibonacciService(IFibonacciCalculator fibonacciCalculator, ICacheManager cacheManager)
+    public FibonacciService(IMemoryChecker memoryChecker, IExecutionTimeChecker timeChecker, ICacheManger cacheManager)
     {
-        _fibonacciCalculator = fibonacciCalculator;
+        _memoryChecker = memoryChecker;
+        _timeChecker = timeChecker;
         _cacheManager = cacheManager;
     }
 
-    public async ValueTask<IEnumerable<int>> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun,
-        int maxMemory)
+    public async ValueTask<ResponseModel> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, double maxMemory)
     {
-        var partFromCache = Array.Empty<int>();
-        if (useCache)
+        // run the timer
+        _timeChecker.Run();
+        
+        if (firstIndex < 0 || lastIndex < 0)
+            throw new Exception("indexes cannot be negative");
+
+        if (firstIndex > lastIndex)
+            throw new Exception("first index cannot be grater than last index");
+
+        var sequence = new List<int>();
+        var message = default(string);
+        for (var i = 0; i <= lastIndex; i++)
         {
-            partFromCache = _cacheManager.Get(firstIndex, lastIndex);
+            if (_memoryChecker.IsThresholdReached(maxMemory))
+            {
+                message = $"We have reached the memory threshold of {_memoryChecker.GetMemory()}";
+                break;
+            }
+            
+            if (_timeChecker.IsTimeElapsed(timeToRun))
+            {
+                message = "Time has elapsed";
+                break;
+            }
+
+            if (i >= firstIndex)
+                sequence.Add(await Fib(i, useCache));
         }
+        
+        return new ResponseModel()
+        {
+            Sequence = sequence.Any() ? sequence : throw new Exception($"No elements were generated{Environment.NewLine}Reason: {message}"),
+            Message = message
+        };
+    }
 
-        if (partFromCache.Length == lastIndex - firstIndex + 1)
-            return partFromCache;
+    private async Task<int> Fib(int n, bool useCache)
+    {
+        if (useCache && _cacheManager.Contains(n))
+            return _cacheManager.Get(n);
+        else if (n < 2)
+            return n;
 
-        var subsequence =
-            _fibonacciCalculator.GetSubsequence(
-                firstIndex + partFromCache.Length,
-                lastIndex,
-                _cacheManager,
-                _cacheManager.GetPenultimate(),
-                _cacheManager.GetUltimate(),
-                partFromCache.Any() ? _cacheManager.GetLastIndex() : 1);
-        return partFromCache.Any() ? partFromCache.Concat(subsequence) : subsequence;
+        var previous = Task.Run(() => Fib(n - 2, useCache));
+        var current = Task.Run(() => Fib(n - 1, useCache));
+
+        var value = await previous + await current;
+
+        _cacheManager.Set(value, n);
+
+        return value;
     }
 }
