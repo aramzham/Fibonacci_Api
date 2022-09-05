@@ -16,11 +16,12 @@ public class FibonacciService : IFibonacciService
         _cacheManager = cacheManager;
     }
 
-    public async ValueTask<ResponseModel> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, double maxMemory)
+    public async ValueTask<ResponseModel> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun,
+        double maxMemory)
     {
         // run the timer
         _timeChecker.Run();
-        
+
         if (firstIndex < 0 || lastIndex < 0)
             throw new Exception("indexes cannot be negative");
 
@@ -36,7 +37,7 @@ public class FibonacciService : IFibonacciService
                 message = $"We have reached the memory threshold of {_memoryChecker.GetMemory()}";
                 break;
             }
-            
+
             if (_timeChecker.IsTimeElapsed(timeToRun))
             {
                 message = "Time has elapsed";
@@ -46,10 +47,12 @@ public class FibonacciService : IFibonacciService
             if (i >= firstIndex)
                 sequence.Add(await Fib(i, useCache));
         }
-        
+
         return new ResponseModel()
         {
-            Sequence = sequence.Any() ? sequence : throw new Exception($"No elements were generated{Environment.NewLine}Reason: {message}"),
+            Sequence = sequence.Any()
+                ? sequence
+                : throw new Exception($"No elements were generated{Environment.NewLine}Reason: {message}"),
             Message = message
         };
     }

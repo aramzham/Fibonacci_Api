@@ -24,7 +24,8 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapGet(
     "/fib",
-    ([FromServices]IFibonacciService fibonacciService, int? firstIndex, int? lastIndex, bool? useCache, int? timeToRun, double? maxMemory) =>
+    ([FromServices] IFibonacciService fibonacciService, int? firstIndex, int? lastIndex, bool? useCache, int? timeToRun,
+            double? maxMemory) =>
         fibonacciService.GetSubsequence(
             firstIndex ?? 0,
             lastIndex ?? 0,
