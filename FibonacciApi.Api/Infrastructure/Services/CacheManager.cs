@@ -7,7 +7,7 @@ public class CacheManager : ICacheManger
 {
     private System.Timers.Timer _cacheInvalidationTimer;
     
-    private readonly Dictionary<ulong, ulong> _cache = new() { { 0, 0 }, { 1, 1 } };
+    private readonly Dictionary<int, ulong> _cache = new() { { 0, 0 }, { 1, 1 } };
 
     public CacheManager(IConfiguration configuration)
     {
@@ -18,11 +18,11 @@ public class CacheManager : ICacheManger
         _cacheInvalidationTimer.Enabled = true;
     }
     
-    public bool Contains(ulong i) => _cache.ContainsKey(i);
+    public bool Contains(int i) => _cache.ContainsKey(i);
     
-    public ulong Get(ulong n) => _cache[n];
+    public ulong Get(int n) => _cache[n];
 
-    public void Set(ulong value, ulong index) => _cache[index] = value;
+    public void Set(ulong value, int index) => _cache[index] = value;
     
     private void OnTimerElapsed(object? sender, ElapsedEventArgs e)
     {

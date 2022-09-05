@@ -28,7 +28,7 @@ public class FibonacciService : IFibonacciService
         if (firstIndex > lastIndex)
             throw new Exception("first index cannot be grater than last index");
 
-        var sequence = new List<int>();
+        var sequence = new List<ulong>();
         var message = default(string);
         for (var i = 0; i <= lastIndex; i++)
         {
@@ -57,12 +57,12 @@ public class FibonacciService : IFibonacciService
         };
     }
 
-    private async Task<int> Fib(int n, bool useCache)
+    private async Task<ulong> Fib(int n, bool useCache)
     {
         if (useCache && _cacheManager.Contains(n))
             return _cacheManager.Get(n);
         else if (n < 2)
-            return n;
+            return (ulong)n;
 
         var previous = Task.Run(() => Fib(n - 2, useCache));
         var current = Task.Run(() => Fib(n - 1, useCache));

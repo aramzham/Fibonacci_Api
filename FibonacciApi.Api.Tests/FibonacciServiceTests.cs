@@ -122,7 +122,7 @@ public class FibonacciServiceTests
 
         _mockMemoryChecker.Verify(_ => _.IsThresholdReached(It.IsAny<double>()), Times.Exactly(lastIndex + 1));
         _mockTimeChecker.Verify(_ => _.IsTimeElapsed(It.IsAny<int>()), Times.Exactly(lastIndex + 1));
-        _mockCacheManager.Verify(_=>_.Set(It.IsAny<int>(), It.IsAny<int>()), Times.AtLeast(2 * firstIndex - 1));
+        _mockCacheManager.Verify(_=>_.Set(It.IsAny<ulong>(), It.IsAny<int>()), Times.AtLeast(2 * firstIndex - 1));
     }
     
     [Theory, AutoData]
@@ -161,6 +161,6 @@ public class FibonacciServiceTests
         result.Should().NotBeNull();
         
         _mockCacheManager.Verify(_=>_.Contains(It.IsAny<int>()), Times.AtLeastOnce);
-        _mockCacheManager.Verify(_=>_.Set(It.IsAny<int>(), It.IsAny<int>()), Times.AtLeastOnce);
+        _mockCacheManager.Verify(_=>_.Set(It.IsAny<ulong>(), It.IsAny<int>()), Times.AtLeastOnce);
     }
 }

@@ -4,6 +4,6 @@ namespace FibonacciApi.Api.Infrastructure.Services.Interfaces;
 
 public interface IFibonacciService
 {
-    ValueTask<ResponseModel> GetSubsequence(ulong firstIndex, ulong lastIndex, bool useCache, ulong timeToRun,
+    ValueTask<ResponseModel> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun,
         double maxMemory);
 }

@@ -27,7 +27,7 @@ public class CacheManagerTests
     }
 
     [Theory, AutoData]
-    public void Contains_WhenValueExists_ReturnsTrue(int index, int value)
+    public void Contains_WhenValueExists_ReturnsTrue(int index, ulong value)
     {
         // arrange
 
@@ -51,7 +51,7 @@ public class CacheManagerTests
     }
 
     [Theory, AutoData]
-    public void Get_WhenIndexExists_ReturnsValue(int index, int value)
+    public void Get_WhenIndexExists_ReturnsValue(int index, ulong value)
     {
         // arrange
 
@@ -76,7 +76,7 @@ public class CacheManagerTests
     }
 
     [Theory, AutoData]
-    public void Set_WhenValueSet_ShouldExistInCache(int index, int value)
+    public void Set_WhenValueSet_ShouldExistInCache(int index, ulong value)
     {
         // arrange
 
@@ -89,7 +89,7 @@ public class CacheManagerTests
     }
 
     [Theory, AutoData]
-    public async Task CacheManager_WhenInvalidationTimerExpires_CacheIsClearedToInitialValues(int index, int value)
+    public async Task CacheManager_WhenInvalidationTimerExpires_CacheIsClearedToInitialValues(int index, ulong value)
     {
         // arrange
         const int defaultTimeInMs = 1 * 60 * 1000;

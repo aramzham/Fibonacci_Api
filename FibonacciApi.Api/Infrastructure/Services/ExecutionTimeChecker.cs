@@ -11,5 +11,5 @@ public class ExecutionTimeChecker : IExecutionTimeChecker
     
     public void Run() => _sw.Start();
 
-    public bool IsTimeElapsed(long timeToRun) => _sw.ElapsedMilliseconds >= timeToRun;
+    public bool IsTimeElapsed(int timeToRun) => _sw.ElapsedMilliseconds >= timeToRun;
 }
