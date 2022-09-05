@@ -2,7 +2,7 @@
 
 public interface ICacheManger
 {
-    bool Contains(int i);
-    int Get(int n);
-    void Set(int value, int index);
+    bool Contains(ulong i);
+    ulong Get(ulong n);
+    void Set(ulong value, ulong index);
 }

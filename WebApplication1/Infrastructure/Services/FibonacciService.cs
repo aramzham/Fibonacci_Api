@@ -19,7 +19,6 @@ namespace WebApplication1.Api.Infrastructure.Services
         public Task<IEnumerable<int>> GetSubsequence(int firstIndex, int lastIndex, bool useCache, int timeToRun, int maxMemory)
         {
             return Task.FromResult(FibonacciCalculator(firstIndex, lastIndex, timeToRun));
-
         }
 
         public IEnumerable<int> FibonacciCalculator(int first, int last, int time)
@@ -41,10 +40,8 @@ namespace WebApplication1.Api.Infrastructure.Services
 
             if (time != 0)
             {
-
                 StopWatch.Start();
             }
-
 
             if (first > last)
             {
@@ -62,15 +59,6 @@ namespace WebApplication1.Api.Infrastructure.Services
                 yield return 1;
             }
 
-            //Milisecunds
-            //2022 - 08 - 30 02:13:29.2124032
-            //2022 - 08 - 30 02:13:29.2125146  0.0001114
-            //2022 - 08 - 30 02:13:29.2125998  0.0000852
-            //2022 - 08 - 30 02:13:29.2126677  0.0000679
-            //2022 - 08 - 30 02:13:29.2127438  0.0000761
-            //2022 - 08 - 30 02:13:29.2136498  0.000906
-            //2022 - 08 - 30 02:13:29.2141811  0.0005313
-            //middle 0.0003
             while (nextIndex < last || breakOperation)
             {
                 if (StopWatch.ElapsedMilliseconds >= time && time != 0)

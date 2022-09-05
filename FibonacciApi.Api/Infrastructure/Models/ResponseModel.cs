@@ -2,6 +2,6 @@
 
 public class ResponseModel
 {
-    public IEnumerable<int> Sequence { get; set; }
-    public string Message { get; set; }
+    public IEnumerable<ulong>? Sequence { get; set; }
+    public string? Message { get; set; }
 }
